@@ -64,7 +64,7 @@ private _codeOnStart = {
 };
 private _codeOnTick = {};
 private _codeOnComplete = {
-	[cursorObject] remoteExec ["vn_mf_fnc_reveal_radiotap_nearest_sites", 2];
+	[cursorObject] remoteExec ["vn_mf_fnc_sites_remoteactions_reveal_radiotap", 2];
 	["RadioTapSuccess", []] remoteExec ["para_c_fnc_show_notification", player];
 };
 private _codeOnInterrupted = {};

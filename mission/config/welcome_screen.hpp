@@ -18,7 +18,7 @@ class ParaWelcomeScreen {
 			"<br/><br/>",
 			"Join our discord here: https://discord.gg/bro-nation",
 			"<br/><br/>",
-			"Interested in joining a unit? Look here: https://discord.gg/bro-nation",
+			"Interested in joining a unit? Look here: https://discord.gg/RFTtr9aSs9",
 			"<br/><br/>",
 			"Have fun, and good luck. You'll need it.",
 			"</t>"

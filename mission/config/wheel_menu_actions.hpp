@@ -66,6 +66,18 @@ class wheel_menu_actions
 		spawn = 0;
 	};
 
+	class whistle : base_action
+	{
+		visible = "ALWAYS";
+		condition = "([_target, 'DacCong'] call vn_mf_fnc_player_on_team)";
+		text = "Whistle";
+		icon = "custom\wheelmenu\whistle.paa";
+		icon_highlighted = "";
+		arguments = "true";
+		function = "vn_mf_fnc_active_whistle";
+		spawn = 0;
+	};
+
 	//Add a sandbag to a building.
 	class add_sandbag : base_action
 	{
@@ -114,7 +126,7 @@ class wheel_menu_actions
 		icon = "img\vn_ico_mf_binoculars_ca.paa";
 		icon_highlighted = "";
 		arguments = "_target";
-		function = "vn_mf_fnc_scout_action";
+		function = "vn_mf_fnc_sites_remoteactions_reveal_scout";
 		spawn = 0;
 	};
 };

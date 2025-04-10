@@ -23,14 +23,14 @@ if (_sitesData isEqualTo []) exitWith { false; };
 private _sites = _sitesData apply {createHashMapFromArray _x};
 
 private _siteCreationFunctions = createHashmapFromArray [
-    ["aa", vn_mf_fnc_sites_create_aa_site],
-    ["hq", vn_mf_fnc_sites_create_hq],
-    ["factory", vn_mf_fnc_sites_create_factory],
-    ["radar", vn_mf_fnc_sites_create_radar],
-    ["artillery", vn_mf_fnc_sites_create_artillery_site],
-    ["camp", vn_mf_fnc_sites_create_camp_site],
-    ["tunnel", vn_mf_fnc_sites_create_tunnel_site],
-    ["water_supply", vn_mf_fnc_sites_create_tunnel_water_supply_site]
+    ["aa", vn_mf_fnc_sites_create_site_aa],
+    ["hq", vn_mf_fnc_sites_create_site_hq],
+    ["factory", vn_mf_fnc_sites_create_site_factory],
+    ["radar", vn_mf_fnc_sites_create_site_radar],
+    ["artillery", vn_mf_fnc_sites_create_site_artillery],
+    ["camp", vn_mf_fnc_sites_create_site_camp],
+    ["tunnel", vn_mf_fnc_sites_create_site_tunnel],
+    ["water_supply", vn_mf_fnc_sites_create_site_water_supply]
 ];
 
 {

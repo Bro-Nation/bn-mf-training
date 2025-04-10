@@ -32,7 +32,7 @@ vn_mf_arsenal_circles = [];
 		private _markerName = format["vn_mf_arsenal_%1", _forEachIndex];
 		private _marker = createMarker [_markerName, getPos _x];
 		_markerName setMarkerAlpha 0;
-		_markerName setMarkerSize [5, 5];
+		_markerName setMarkerSize [25, 25];
 		_markerName setMarkerShape "ELLIPSE";
 
 		vn_mf_arsenal_circles pushBack _markerName;

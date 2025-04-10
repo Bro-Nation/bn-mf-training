@@ -19,6 +19,16 @@
 
 params ["_objectName","_destinationName"];
 
+private _fnc_setPosAGLS = {
+	params ["_obj", "_pos", "_offset"];
+	_offset = _pos select 2;
+	if (isNil "_offset") then {_offset = 0};
+	_pos set [2, worldSize];
+	_obj setPosASL _pos;
+	_pos set [2, vectorMagnitude (_pos vectorDiff getPosVisual _obj) + _offset];
+	_obj setPosASL _pos;
+};
+
 private _baseConfig = missionConfigFile >> "gamemode" >> "teleporters";
 private _objectConfig = _baseConfig >> "objects" >> _objectName;
 private _destinationConfig = _baseConfig >> "destinations" >> _destinationName;
@@ -36,17 +46,25 @@ private _newLocation = _destination findEmptyPosition [3,20,typeOf _player];
 if (_newLocation isEqualTo []) then {_newLocation = _destination};
 
 remoteExecCall ["vn_mf_fnc_display_location_time",_player];
-if(_destinationName isEqualTo "satansangels_base") then 
-{
-  _player setPosATL [20152.6,67.6535,123.54];
-} else {
-  _player setPos _newLocation;
-};
 
-remoteExecCall ["vn_mf_fnc_display_location_time",_player];
-if(_destinationName isEqualTo "rappel_top_base") then 
+if(_destinationName isEqualTo "satansangels_base") then {
+  if ((toLower worldName) isEqualTo "cam_lao_nam") then {
+    _player setPosATL [20152.6,67.6535,123.54];
+  }
+  else
+  {
+    _player setPos _newLocation;
+  };
+}
+else
 {
-  _player setPosATL [18256.8,5278.29,34];
-} else {
-  _player setPos _newLocation;
+  if (_destinationName isEqualTo "rappel_top_base") then {
+    private _destination = getMarkerPos ["mf_respawn_rappel_range_top", true];
+
+    _player setVehiclePosition [_destination, [], 0, "CAN_COLLIDE"];
+  }
+  else 
+  {
+    _player setPos _newLocation;
+  };
 };

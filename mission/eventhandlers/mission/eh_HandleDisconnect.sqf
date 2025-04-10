@@ -31,6 +31,8 @@ private _prefix = "vn_mf_db_";
 private _config = (missionConfigFile >> "gamemode" >> "vars" >> "players");
 private _blacklisted = getArray(_config >> "blacklisted");
 
+["CuratorDisconnect", [_unit, _id, _uid, _name]] call CBA_fnc_serverEvent;
+
 private _vardata = [];
 if !(isNull _unit) then
 {
@@ -47,7 +49,7 @@ if !(isNull _unit) then
 	// save players loadout
 	["SET", (_uid + "_loadout"), getUnitLoadout _unit] call para_s_fnc_profile_db;
 
-	private _playerTeam = _unit getVariable ["vn_mf_db_player_group", "FAILED"];
+	private _playerTeam = _unit getVariable ["vn_mf_db_player_group", "MikeForce"];
 	private _playerTeamArray = missionNamespace getVariable [_playerTeam, []];
 
 	// Remove the player from their team array

@@ -30,6 +30,7 @@ Vehicle states:
 ["RESPAWNING", _timeToRespawnAt]
 */
 
+
 //This is a separate function, so we can exit early with exitWith.
 //This is basically a state machine for every vehicle.
 //First it does state transitions, then handles the states.
@@ -39,12 +40,24 @@ private _vehicle = _spawnPoint getOrDefault ["currentVehicle", objNull];
 private _settings = _spawnPoint get "settings";
 private _respawnType = _settings get "respawnType";
 
+if ((_spawnPoint get "status" get "state") == "ADMINLOCKED") exitWith {
+	// just switched the state over after request from client
+	// probably need to delete the vehicle.
+	if(alive _vehicle) then {
+
+		deleteVehicle _vehicle;
+		[_spawnPoint] call vn_mf_fnc_veh_asset_marker_delete;
+	};
+};
+
+
 if(!alive _vehicle) then {
 	[_vehicle] call vn_mf_fnc_veh_asset_unlock_vehicle;
 };
 
+
 //Vehicle is dead, and hasn't be transitioned to a "DEAD" state.
-if (!alive _vehicle && !((_spawnPoint get "status" get "state") in ["RESPAWNING", "REPAIRING", "WRECKED"])) then {
+if (!alive _vehicle && !((_spawnPoint get "status" get "state") in ["RESPAWNING", "REPAIRING", "WRECKED", "QUEUED"])) then {
 	if (_respawnType == "WRECK") exitWith {
 		[_spawnPoint] call vn_mf_fnc_veh_asset_set_wrecked;
 	};
@@ -75,7 +88,7 @@ TODO: "unload" the statics out of the vehicle then set them to wrecked?
 if (
 	_vehicle getVariable ["log_inventory_loaded", false]
 	&& !alive (_vehicle getVariable ["log_inventory_loaded_vehicle", objNull])
-	&& !((_spawnPoint get "status" get "state") in ["RESPAWNING", "REPAIRING"])
+	&& !((_spawnPoint get "status" get "state") in ["RESPAWNING", "REPAIRING", "QUEUED"])
 ) then {
 	if (_respawnType == "WRECK") exitWith {
 		deleteVehicle _vehicle;
@@ -189,14 +202,16 @@ if ((_spawnPoint get "status" get "state") == "IDLE") then {
 };
 
 //Update marker position if it exists, and it's been too long.
-if (_doMarkerUpdate && !((_spawnPoint get "status" get "state") in ["RESPAWNING", "REPAIRING"])) then {
+if (_doMarkerUpdate && !((_spawnPoint get "status" get "state") in ["RESPAWNING", "REPAIRING", "QUEUED"])) then {
 	[_spawnPoint] call vn_mf_fnc_veh_asset_marker_update_position;
 };
 
-//Check if a vehicle should be respawned
+//Check if a vehicle should be queued for respawning
+// guarantee delivery exactly once to avoid attempting multiple vehicle spawns and lots of explosions.
 if (
 	(_spawnPoint get "status" get "state") in ["RESPAWNING", "REPAIRING"] && 
 	{(_spawnPoint get "status" getOrDefault ["finishesAt", 0]) < serverTime}
 ) then {
 	vn_mf_spawn_points_to_respawn pushBackUnique (_spawnPoint get "id");
+	[_spawnPoint] call vn_mf_fnc_veh_asset_set_queued;
 };
